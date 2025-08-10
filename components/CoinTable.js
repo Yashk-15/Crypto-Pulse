@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 export default function CoinsTable({ coins }) {
   const [watchlist, setWatchlist] = useState([]);
@@ -75,9 +76,7 @@ export default function CoinsTable({ coins }) {
                     href={`/coin/${coin.id}`} 
                     className="flex items-center space-x-3 hover:text-blue-600 transition-colors"
                   >
-                    <img 
-                      src={coin.image} 
-                      alt={coin.name} 
+                   <Image src={coin.image} alt={coin.name} width={32} height={32} />
                       className="w-8 h-8 rounded-full"
                       onError={(e) => e.target.src = '/placeholder-coin.png'}
                     />
