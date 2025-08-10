@@ -113,7 +113,7 @@ export default function HomePage() {
         {!loading && !error && filteredCoins.length === 0 && searchQuery && (
           <div className="text-center py-12">
             <p className="text-gray-600">
-          No cryptocurrencies found for &quot;{searchQuery}&quot;
+          <p>No cryptocurrencies found for '{searchQuery}'</p>
          </p>
           </div>
         )}
