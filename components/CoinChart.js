@@ -97,8 +97,8 @@ export default function CoinChart({ id, range }) {
   };
 
   useEffect(() => {
-    fetchChart();
-  }, [id, range]);
+  fetchChart();
+}, [fetchChart]);
 
   const options = {
     responsive: true,
