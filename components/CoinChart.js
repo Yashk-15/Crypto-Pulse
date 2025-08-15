@@ -100,7 +100,7 @@ export default function CoinChart({ id, range }) {
 
   useEffect(() => {
   fetchChart();
-}, [fetchChart]);
+}, [id, range]);
 
   const options = {
     responsive: true,
