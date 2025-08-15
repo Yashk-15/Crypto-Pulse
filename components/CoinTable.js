@@ -76,10 +76,15 @@ export default function CoinsTable({ coins }) {
                     href={`/coin/${coin.id}`} 
                     className="flex items-center space-x-3 hover:text-blue-600 transition-colors"
                   >
-                   <Image src={coin.image} alt={coin.name} width={32} height={32}
-                      className="w-8 h-8 rounded-full"
-                      onError={(e) => e.target.src = '/placeholder-coin.png'}
-                    />
+                   <Image
+                      src={coin.image || '/placeholder-coin.png'}
+alt={coin.name}
+width={32}
+  height={32}
+    className="w-8 h-8 rounded-full"
+      unoptimized
+        />
+
                     <div>
                       <div className="font-medium text-gray-900">{coin.name}</div>
                       <div className="text-gray-500 text-sm">{coin.symbol.toUpperCase()}</div>
