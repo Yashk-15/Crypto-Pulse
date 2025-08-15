@@ -29,14 +29,7 @@ The dashboard allows users to browse live market data, view detailed charts, sea
 - Watchlist persists using **localStorage**.
 - Watchlist page displays the same table format with **live updated prices**.
 
-### 4️. Bonus Features
-- **Loading skeletons** for a smooth UX.
-- Nice **empty/error** states.
-- **Debounced search** to reduce API calls.
-- Fully responsive design.
-- **Reusable components** for scalability.
-
-## Tech Stack
+## 4. Tech Stack
 - **Frontend:** Next.js, React
 - **Styling:** Tailwind CSS
 - **Charts:** Chart.js / react-chartjs-2
