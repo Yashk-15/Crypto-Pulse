@@ -1,7 +1,4 @@
 'use client';
-import dynamic from 'next/dynamic';
-const LineChart = dynamic(() => import('./LineChart'), { ssr: false });
-
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
