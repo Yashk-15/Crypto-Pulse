@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
   images: {
-    domains: ['assets.coingecko.com'],
+    domains: ['assets.coingecko.com'], // Allow CoinGecko image domain
   },
 };
+
+module.exports = nextConfig;
 
