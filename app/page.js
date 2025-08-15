@@ -15,18 +15,20 @@ function debounce(func, delay) {
 }
 
 
-export default function HomePage() {
-  const [coins, setCoins] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [page, setPage] = useState(1);
+// app/page.js
+export default async function HomePage() {
+  const res = await fetch(
+    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false',
+    { next: { revalidate: 60 } }
+  );
+  const coins = await res.json();
 
-  const [searchInput, setSearchInput] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearchChange = (e) => {
-    setSearchInput(e.target.value); // This updates immediately for UI
-  };
+  return (
+    <div className="p-6">
+      <CoinsTable coins={coins} />
+    </div>
+  );
+}
 
   useEffect(() => {
     const timer = setTimeout(() => {
