@@ -1,59 +1,48 @@
+'use client'; // ✅ Add this at the top
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { getData } from "../utils/api";
-import CoinsTable from "../components/CoinTable"; // Add this import
+import CoinsTable from "../components/CoinTable";
 
 // Simple debounce function
 function debounce(func, delay) {
   let timeoutId;
-  return function(...args) {
+  return function (...args) {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => func.apply(this, args), delay);
   };
 }
 
+export default function HomePage() {
+  const [coins, setCoins] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
-// app/page.js
-export default async function HomePage() {
-  const res = await fetch(
-    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false',
-    { next: { revalidate: 60 } }
-  );
-  const coins = await res.json();
-
-  return (
-    <div className="p-6">
-      <CoinsTable coins={coins} />
-    </div>
-  );
-}
-
+  // ✅ Debounced search
   useEffect(() => {
     const timer = setTimeout(() => {
       setSearchQuery(searchInput);
-    }, 300); // 300ms delay
-
+    }, 300);
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-  const filteredCoins = coins.filter(
-    (coin) =>
-      coin.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      coin.symbol?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
+  // ✅ Fetch coins with caching
   useEffect(() => {
     const fetchCoins = async () => {
+      setLoading(true);
       try {
         const cachedData = sessionStorage.getItem('cachedCoins');
         const cacheTime = sessionStorage.getItem('cacheTime');
-        
+
         if (cachedData && cacheTime && Date.now() - cacheTime < 300000) {
           setCoins(JSON.parse(cachedData));
         } else {
-          const data = await getData('/coins/markets?vs_currency=usd&per_page=50');
+          const data = await getData(`/coins/markets?vs_currency=usd&per_page=50&page=${page}`);
           setCoins(data);
           sessionStorage.setItem('cachedCoins', JSON.stringify(data));
           sessionStorage.setItem('cacheTime', Date.now());
@@ -68,25 +57,39 @@ export default async function HomePage() {
     fetchCoins();
   }, [page]);
 
+  const filteredCoins = coins.filter(
+    (coin) =>
+      coin.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      coin.symbol?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleSearchChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
   return (
     <div>
       <Navbar />
 
       <div className="max-w-7xl mx-auto p-6">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-shadow-amber-50 mb-2">Cryptocurrency Markets</h1>
-          <p className="text-shadow-amber-200">Track live cryptocurrency prices and market data</p>
+          <h1 className="text-4xl font-bold text-shadow-amber-50 mb-2">
+            Cryptocurrency Markets
+          </h1>
+          <p className="text-shadow-amber-200">
+            Track live cryptocurrency prices and market data
+          </p>
         </div>
 
         {/* Search Input */}
         <div className="mb-6">
-        <input
-  type="text"
-  placeholder="Search by name or symbol..."
-  value={searchInput} // Changed from search to searchInput
-  onChange={handleSearchChange} // Updated handler
-  className="w-full max-w-md px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-/>
+          <input
+            type="text"
+            placeholder="Search by name or symbol..."
+            value={searchInput}
+            onChange={handleSearchChange}
+            className="w-full max-w-md px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+          />
         </div>
 
         {/* Loading State */}
@@ -101,7 +104,7 @@ export default async function HomePage() {
         {error && (
           <div className="text-center py-12">
             <p className="text-red-500 text-lg mb-4">{error}</p>
-            <button 
+            <button
               onClick={() => window.location.reload()}
               className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
             >
@@ -114,12 +117,12 @@ export default async function HomePage() {
         {!loading && !error && filteredCoins.length === 0 && searchQuery && (
           <div className="text-center py-12">
             <p className="text-gray-600">
-          <p>It&apos;s a great time to invest in crypto</p>
-         </p>
+              It&apos;s a great time to invest in crypto
+            </p>
           </div>
         )}
-      
-        {/* Coins Table - Replaced with CoinsTable component */}
+
+        {/* Coins Table */}
         {!loading && !error && filteredCoins.length > 0 && (
           <CoinsTable coins={filteredCoins} />
         )}
@@ -134,11 +137,11 @@ export default async function HomePage() {
             >
               Previous
             </button>
-            
+
             <span className="px-4 py-2 bg-blue-500 text-white rounded-lg font-medium">
               Page {page}
             </span>
-            
+
             <button
               onClick={() => setPage((p) => p + 1)}
               className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
