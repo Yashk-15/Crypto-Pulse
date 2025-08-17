@@ -83,12 +83,12 @@ export default function HomePage() {
 
         {/* Search Input */}
         <div className="mb-6">
-          <input
+        <input
             type="text"
             placeholder="Search by name or symbol..."
-            value={searchInput}
-            onChange={handleSearchChange}
-            className="w-full max-w-md px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+            value={searchInput} // Changed from search to searchInput
+            onChange={handleSearchChange} // Updated handler
+            className="w-85 p-3 rounded-b-2xl bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"
           />
         </div>
 
